@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhang.mynews.potal.dao.NewsMapper">
+
+	<resultMap id="BaseResultMap" type="com.zhang.mynews.bean.News">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="content" property="content" jdbcType="LONGVARCHAR" />
+		<result column="coverpicture" property="coverpicture" jdbcType="VARCHAR" />
+		<result column="author" property="author" jdbcType="INTEGER" />
+		<result column="readtimes" property="readtimes" jdbcType="INTEGER" />
+		<result column="collections" property="collections" jdbcType="INTEGER" />
+		<result column="likes" property="likes" jdbcType="INTEGER" />
+		<result column="creationtime" property="creationtime" jdbcType="VARCHAR" />
+		<result column="visible" property="visible" jdbcType="INTEGER" />
+		<result column="type" property="type" jdbcType="VARCHAR" />
+	</resultMap>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from t_news
+		where id = #{id}
+	</delete>
+	<insert id="insert" parameterType="News">
+		insert into t_news (
+			title, type,
+			content, coverpicture, author,
+			readtimes,collections,likes,creationtime,visible
+		)
+		values
+		(
+			#{title},#{type},
+			#{content},#{coverpicture},#{author},
+			#{readtimes},#{collections},#{likes},
+			#{creationtime},#{visible}
+		)
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="News">
+		update t_news
+		set
+		title =#{title},
+		type = #{type},
+		content = #{content},
+		coverpicture = #{coverpicture},
+		author = #{author},
+		readtimes = #{readtimes},
+		collections = #{collections},
+		likes = #{likes},
+		creationtime =#{creationtime},
+		visible =#{visible}
+		where id = #{id}
+	</update>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select *
+		from t_news
+		where id = #{id}
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select *
+		from t_news
+	</select>
+	<select id="queryList" resultMap="BaseResultMap">
+		select *
+		from t_news
+		<trim prefix="WHERE" prefixOverrides="AND |OR">
+			<if test="author!=null">AND author = #{author}</if>
+			<if test="queryText!=null">AND title like concat("%",#{queryText},"%")</if>
+		</trim>
+		 order by creationtime desc
+		 limit #{startIndex},#{pagesize} 
+	</select>
+	
+	<select id="queryCount" resultType="int">
+		select count(*)
+		from t_news
+		<where>
+			<if test="author!=null">author = #{author}</if>
+			<if test="queryText!=null">and title like concat("%",#{queryText},"%")</if>
+		</where>
+	</select>
+</mapper>

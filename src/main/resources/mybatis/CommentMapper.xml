@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhang.mynews.potal.dao.CommentMapper">
+
+	<resultMap id="BaseResultMap" type="com.zhang.mynews.bean.Comment">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="newsid" property="newsid" jdbcType="INTEGER" />
+		<result column="floor" property="floor" jdbcType="INTEGER" />
+		<result column="likes" property="likes" jdbcType="INTEGER" />
+		<result column="author" property="author" jdbcType="INTEGER" />
+		<result column="visible" property="visible" jdbcType="INTEGER" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="creationtime" property="creationtime" jdbcType="VARCHAR" />
+	</resultMap>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from t_comment
+		where id = #{id}
+	</delete>
+	<insert id="insert" parameterType="Comment">
+		insert into t_comment (
+			newsid, floor,
+			likes, author, visible,
+			content,creationtime
+		)
+		values
+		(
+			#{newsid},#{floor},
+			#{likes},#{author},#{visible},
+			#{content},#{creationtime}
+		)
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="Comment">
+		update t_comment
+		set
+			newsid =#{newsid},
+			floor = #{floor},
+			likes = #{likes},
+			author = #{author},
+			visible = #{visible},
+			content = #{content},
+			creationtime = #{creationtime}
+		where id = #{id}
+	</update>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select *
+		from t_comment
+		where id = #{id}
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select *
+		from t_comment
+	</select>
+</mapper>
